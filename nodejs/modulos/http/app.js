@@ -1,5 +1,4 @@
-    //inportando o modulo http
-const http = require('http');
+import http from 'http';
 
 //criando o servidor que responde com "Hello World" para todas as requisições
 http.createServer((req,res) => {
