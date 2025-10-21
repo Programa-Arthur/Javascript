@@ -3,4 +3,6 @@ function saudacao(nome) {
 }
 
 // Exportando a função para que possa ser usada em outros arquivos
-export default saudacao;
+module.exports = {
+    saudacao
+};

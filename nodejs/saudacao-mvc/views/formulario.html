@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8" />
+	<title>Formulário - Música e Artista</title>
+</head>
+<body>
+	<h1>Compartilhe sua música e artista favoritos</h1>
+
+	<form id="favForm" method="post" action="/formulario">
+		<label for="musica">Sua música favorita</label><br />
+		<input type="text" id="musica" name="musica" placeholder="Ex: Imagine" required /><br /><br />
+
+		<label for="artista">Seu artista favorito</label><br />
+		<input type="text" id="artista" name="artista" placeholder="Ex: John Lennon" required /><br /><br />
+
+		<button type="submit">Enviar</button>
+	</form>
+
+	<div id="mensagem" style="margin-top:1em;color:green;"></div>
+	<div id="erros" style="margin-top:1em;color:red;"></div>
+
+	<script>
+		// Envia via fetch para /formulario (JSON) e mostra feedback sem recarregar.
+		// Se preferir, remova este script e deixe o form fazer POST tradicional.
+		document.getElementById('favForm').addEventListener('submit', async function (e) {
+			e.preventDefault();
+			document.getElementById('mensagem').textContent = '';
+			document.getElementById('erros').textContent = '';
+
+			const musica = document.getElementById('musica').value;
+			const artista = document.getElementById('artista').value;
+
+			try {
+				const res = await fetch(this.action, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ musica, artista })
+				});
+				const body = await res.json();
+				if (!res.ok) {
+					document.getElementById('erros').textContent = (body && body.errors) ? body.errors.join('; ') : 'Erro ao enviar';
+				} else {
+					document.getElementById('mensagem').textContent = 'Enviado com sucesso!';
+					// limpa campos
+					this.reset();
+				}
+			} catch (err) {
+				document.getElementById('erros').textContent = 'Erro de conexão.';
+			}
+		});
+	</script>
+</body>
+</html>
